@@ -1,0 +1,61 @@
+﻿@model ContributionsViewModel
+
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 60px;">
+
+        <div class="header">
+            <h1>
+                Contributors for the
+                @Model.SimchaName Simcha
+            </h1>
+        </div>
+        <div class="table-responsive">
+            <form method="POST" action="/simchas/updatecontributions">
+                <input type="hidden" name="simchaId" value="@Model.SimchaId" />
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Contribute</th>
+                        <th>Name</th>
+                        <th>Balance</th>
+                        <th>Always Include</th>
+                        <th>Amount</th>
+                    </tr>
+                    @{ int counter = 0; }
+                    @foreach (var con in Model.Contributors)
+                    {
+                        <input type="hidden" name="contributors[@counter].Id" value="@con.Id" />
+                        <tr>
+                            <td>
+                                @if (con.Include)
+                                {
+                                    <input class="contribute" type="checkbox" name="contributors[@counter].Include" checked="checked" value="true" />
+                                }
+                                else
+                                {
+                                    <input class="contribute" type="checkbox" name="contributors[@counter].Include" value="true" />
+                                }
+                            </td>
+                            <td>@con.FirstName @con.LastName</td>
+                            <td>@con.Balance.ToString("C")</td>
+                            <td style="text-align: center;">
+                                <span style="font-size: 25px;" class=" @(con.AlwaysInclude ? "oi oi-check" : "")"></span>
+                            </td>
+                            <td>
+                                <input type="text" name="contributors[@counter].amount" class="form-control" value="@con.Amount" />
+                            </td>
+                            @{ counter++;}
+                        </tr>
+
+                    }
+                </table>
+                <div style="text-align:center;">
+                    <button class="btn-lg btn-danger">Update</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+@section Iconic{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" />
+}
